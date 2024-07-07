@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.CropsItemMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.CropsItem">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="crops_item_id" jdbcType="INTEGER" property="cropsItemId" />
+    <result column="crops_id" jdbcType="INTEGER" property="cropsId" />
+    <result column="crops_no" jdbcType="VARCHAR" property="cropsNo" />
+    <result column="plant_time" jdbcType="TIMESTAMP" property="plantTime" />
+    <result column="plant_location" jdbcType="VARCHAR" property="plantLocation" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <association property="crops" column="crops_id" select="com.vpms.dao.mapper.CropsMapper.selectCropsById"/>
+  </resultMap>
+
+  <select id="selectCropsItemById" resultMap="BaseResultMap">
+    select * from crops_item ci where ci.crops_item_id=#{cropsItemId}
+  </select>
+
+  <select id="selectCropsItemByCropsId" resultMap="BaseResultMap">
+    select * from crops_item ti
+    <if test="cropsId!=null">
+      where ti.crops_id=#{cropsId}
+    </if>
+    <if test="cropsId==null">
+      where ti.crops_id in(select c.crops_id from crops c where c.user_id=#{userId})
+    </if>
+  </select>
+
+  <select id="selectCropsItemCountByCropsId" resultType="java.lang.Integer">
+    select count(*) from crops_item ti
+    <if test="cropsId!=null">
+      where ti.crops_id=#{cropsId}
+    </if>
+    <if test="cropsId==null">
+      where ti.crops_id in(select c.crops_id from crops c where c.user_id=#{userId})
+    </if>
+  </select>
+</mapper>

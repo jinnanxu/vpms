@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.TaskMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Task">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="task_time" jdbcType="TIMESTAMP" property="taskTime" />
+    <result column="crops_id" jdbcType="INTEGER" property="cropsId" />
+    <result column="crops_item_id" jdbcType="INTEGER" property="cropsItemId" />
+    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="task_type" jdbcType="VARCHAR" property="taskType" />
+    <result column="task_detail" jdbcType="VARCHAR" property="taskDetail" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="weather" jdbcType="VARCHAR" property="weather" />
+    <result column="temp" jdbcType="VARCHAR" property="temp" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="advice" jdbcType="VARCHAR" property="advice" />
+    <result column="advice_expert" jdbcType="VARCHAR" property="adviceExpert" />
+    <association column="crops_id" property="crops" javaType="com.vpms.dao.model.Crops" select="com.vpms.dao.mapper.CropsMapper.selectCropsById"></association>
+    <association column="crops_item_id" property="cropsItem" javaType="com.vpms.dao.model.CropsItem" select="com.vpms.dao.mapper.CropsItemMapper.selectCropsItemById"></association>
+  </resultMap>
+
+  <resultMap id="PlainResultMap" type="com.vpms.dao.model.Task">
+    <!--
+      不关联外键的ResultMap
+    -->
+    <id column="task_id" jdbcType="INTEGER" property="taskId" />
+    <result column="task_time" jdbcType="TIMESTAMP" property="taskTime" />
+    <result column="crops_id" jdbcType="INTEGER" property="cropsId" />
+    <result column="adopt_order_id" jdbcType="INTEGER" property="adoptOrderId" />
+    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="task_type" jdbcType="VARCHAR" property="taskType" />
+    <result column="task_detail" jdbcType="VARCHAR" property="taskDetail" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="weather" jdbcType="VARCHAR" property="weather" />
+    <result column="temp" jdbcType="VARCHAR" property="temp" />
+  </resultMap>
+
+  <select id="selectTaskList" resultMap="BaseResultMap">
+    select * from task t where t.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+    order by t.task_time desc limit #{start}, #{end}
+  </select>
+
+  <select id="selectTaskCount" resultType="java.lang.Integer">
+    select count(*) from task t where t.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+  </select>
+
+  <select id="selectMyTreeTaskList" resultMap="PlainResultMap">
+    select * from task t where t.adopt_order_id=#{orderId}
+    order by t.task_time desc
+  </select>
+
+  <select id="selectAllTaskList" resultMap="BaseResultMap">
+    select * from task t where 1=1
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+    order by t.task_time desc limit #{start}, #{end}
+  </select>
+
+  <select id="selectAllTaskListCount" resultType="java.lang.Integer">
+    select count(*) from task t where 1=1
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+  </select>
+</mapper>

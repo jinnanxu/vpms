@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.CropsStatusMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.CropsStatus">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="crops_status_id" jdbcType="INTEGER" property="cropsStatusId" />
+    <result column="crops_id" jdbcType="INTEGER" property="cropsId" />
+    <result column="crops_item_id" jdbcType="INTEGER" property="cropsItemId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="curr_status" jdbcType="VARCHAR" property="currStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <association column="crops_id" property="crops" javaType="com.vpms.dao.model.Crops" select="com.vpms.dao.mapper.CropsMapper.selectCropsById"></association>
+    <association column="crops_item_id" property="cropsItem" javaType="com.vpms.dao.model.CropsItem" select="com.vpms.dao.mapper.CropsItemMapper.selectCropsItemById"></association>
+  </resultMap>
+
+  <resultMap id="PlainResultMap" type="com.vpms.dao.model.CropsStatus">
+    <!--
+      不包含关联表对象的ResultMap
+    -->
+    <id column="crops_status_id" jdbcType="INTEGER" property="cropsStatusId" />
+    <result column="crops_id" jdbcType="INTEGER" property="cropsIdId" />
+    <result column="adopt_order_id" jdbcType="INTEGER" property="adoptOrderId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="curr_status" jdbcType="VARCHAR" property="currStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <select id="selectCropsStatusList" resultMap="BaseResultMap">
+    select * from crops_status t where t.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+    order by t.update_time desc limit #{start}, #{end}
+  </select>
+
+  <select id="selectCropsStatusCount" resultType="java.lang.Integer">
+    select count(*) from crops_status t where t.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      and t.crops_id in(
+      select tr.crops_id from crops tr where tr.crops_name like CONCAT('%', #{kw}, '%')
+      )
+    </if>
+  </select>
+
+</mapper>

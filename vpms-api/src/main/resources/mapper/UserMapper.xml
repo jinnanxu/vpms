@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="farm_name" jdbcType="VARCHAR" property="farmName" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+  <select id="selectUserById" resultMap="BaseResultMap">
+    select * from user u where u.user_id=#{userId}
+  </select>
+
+  <select id="selectStudentList" resultMap="BaseResultMap">
+    select * from user t where 1=1
+    <if test="kw!=null and kw!=''">
+      AND t.mobile LIKE CONCAT('%',#{kw},'%')
+    </if>
+    order by t.user_id desc limit #{start},#{end}
+  </select>
+
+  <select id="selectStudentListCount" resultType="java.lang.Integer">
+    select count(*) from user t where 1=1
+    <if test="kw!=null and kw!=''">
+      AND t.mobile LIKE CONCAT('%',#{kw},'%')
+    </if>
+  </select>
+</mapper>

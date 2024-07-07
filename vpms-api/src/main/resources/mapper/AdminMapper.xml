@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Admin">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="role" jdbcType="INTEGER" property="role" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="work_dept" jdbcType="VARCHAR" property="workDept" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="rate" jdbcType="DOUBLE" property="rate" />
+    <result column="service_times" jdbcType="INTEGER" property="serviceTimes" />
+  </resultMap>
+
+  <select id="selectExpertById" resultMap="BaseResultMap">
+    select * from admin a where a.admin_id=#{adminId}
+  </select>
+
+  <select id="selectExpertList" resultMap="BaseResultMap">
+    select * from admin t where t.role=2
+    <if test="kw!=null and kw!=''">
+      AND t.mobile LIKE CONCAT('%',#{kw},'%')
+    </if>
+    order by t.admin_id desc limit #{start},#{end}
+  </select>
+
+  <select id="selectExpertListCount" resultType="java.lang.Integer">
+    select count(*) from admin t where t.role=2
+    <if test="kw!=null and kw!=''">
+      AND t.mobile LIKE CONCAT('%',#{kw},'%')
+    </if>
+  </select>
+
+</mapper>

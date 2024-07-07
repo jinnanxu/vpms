@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.CropsMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Crops">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="crops_id" jdbcType="INTEGER" property="cropsId" />
+    <result column="crops_name" jdbcType="VARCHAR" property="cropsName" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="production" jdbcType="VARCHAR" property="production" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+  </resultMap>
+
+  <select id="selectCropsById" resultMap="BaseResultMap">
+    select * from crops where crops_id=#{cropsId}
+  </select>
+</mapper>

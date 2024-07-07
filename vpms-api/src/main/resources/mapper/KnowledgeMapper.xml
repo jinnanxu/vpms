@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.KnowledgeMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Knowledge">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="knowledge_id" jdbcType="INTEGER" property="knowledgeId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="publish_date" jdbcType="TIMESTAMP" property="publishDate" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="pics" jdbcType="VARCHAR" property="pics" />
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <association property="expert" column="user_id" select="com.vpms.dao.mapper.AdminMapper.selectExpertById"/>
+  </resultMap>
+
+  <select id="selectExpertKnowledge" resultMap="BaseResultMap">
+    select * from knowledge kb where 1=1
+    <if test="userId!=null">AND kb.user_id=#{userId}</if>
+    <if test="kw!=null and kw!=''">
+      AND (kb.title LIKE CONCAT('%',#{kw},'%') OR kb.tags LIKE CONCAT('%',#{kw},'%'))
+    </if>
+    order by kb.publish_date desc limit #{start},#{end}
+  </select>
+
+  <select id="selectExpertKnowledgeCount" resultType="java.lang.Integer">
+    select count(*) from knowledge kb where 1=1
+    <if test="userId!=null">AND kb.user_id=#{userId}</if>
+    <if test="kw!=null and kw!=''">
+      AND (kb.title LIKE CONCAT('%',#{kw},'%') OR kb.tags LIKE CONCAT('%',#{kw},'%'))
+    </if>
+  </select>
+
+  <select id="searchKnowledge" resultMap="BaseResultMap">
+    select * from knowledge kb where 1=1
+    <if test="kw!=null and kw!=''">
+      AND (kb.title LIKE CONCAT('%',#{kw},'%') OR kb.tags LIKE CONCAT('%',#{kw},'%'))
+    </if>
+    order by kb.view_count desc limit #{start},#{end}
+  </select>
+
+  <select id="searchKnowledgeCount" resultType="java.lang.Integer">
+    select count(*) from knowledge kb where 1=1
+    <if test="kw!=null and kw!=''">
+      AND (kb.title LIKE CONCAT('%',#{kw},'%') OR kb.tags LIKE CONCAT('%',#{kw},'%'))
+    </if>
+  </select>
+</mapper>

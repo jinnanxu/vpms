@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Question">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="key_word" jdbcType="VARCHAR" property="keyWord" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="rate" jdbcType="DOUBLE" property="rate" />
+    <result column="search_view_count" jdbcType="INTEGER" property="searchViewCount"/>
+    <association property="user" column="user_id" select="com.vpms.dao.mapper.UserMapper.selectUserById"></association>
+  </resultMap>
+
+  <select id="selectQuestionById" resultMap="BaseResultMap">
+    SELECT * FROM question q WHERE q.question_id=#{questionId}
+  </select>
+
+  <select id="selectQuestions" resultMap="BaseResultMap">
+    SELECT * FROM question q WHERE 1=1
+    <if test="kw!=null and kw!=''">
+      AND (q.title LIKE CONCAT('%',#{kw},'%') OR q.key_word LIKE CONCAT('%',#{kw},'%'))
+    </if>
+    ORDER BY q.create_time DESC LIMIT #{start},#{end}
+  </select>
+
+  <select id="selectQuestionsCount" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM question q WHERE 1=1
+    <if test="kw!=null and kw!=''">
+      AND (q.title LIKE CONCAT('%',#{kw},'%') OR q.key_word LIKE CONCAT('%',#{kw},'%'))
+    </if>
+  </select>
+
+  <!--查询我的问题列表-->
+  <select id="selectMyQuestions" resultMap="BaseResultMap">
+    SELECT * FROM question q WHERE q.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      AND (q.title LIKE CONCAT('%',#{kw},'%') OR q.key_word LIKE CONCAT('%',#{kw},'%'))
+    </if>
+    ORDER BY q.create_time DESC LIMIT #{start},#{end}
+  </select>
+
+  <!--查询我的问题总记录数-->
+  <select id="selectMyQuestionsCount" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM question q WHERE q.user_id=#{userId}
+    <if test="kw!=null and kw!=''">
+      AND (q.title LIKE CONCAT('%',#{kw},'%') OR q.key_word LIKE CONCAT('%',#{kw},'%'))
+    </if>
+  </select>
+
+  <select id="selectNotFinishQuestion" resultMap="BaseResultMap">
+    SELECT * FROM question q WHERE q.status=1
+  </select>
+
+  <select id="selectWaitAnswerQuestion" resultMap="BaseResultMap">
+    SELECT * FROM question q WHERE q.status=0 and DATEDIFF(NOW(), q.create_time) &gt;= 1
+  </select>
+</mapper>

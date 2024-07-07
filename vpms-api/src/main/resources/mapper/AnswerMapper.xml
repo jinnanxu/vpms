@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vpms.dao.mapper.AnswerMapper">
+  <resultMap id="BaseResultMap" type="com.vpms.dao.model.Answer">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="answer_id" jdbcType="INTEGER" property="answerId" />
+    <result column="question_id" jdbcType="INTEGER" property="questionId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="answer_type" jdbcType="INTEGER" property="answerType" />
+    <result column="answer_time" jdbcType="TIMESTAMP" property="answerTime" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <association property="user" column="user_id" select="com.vpms.dao.mapper.UserMapper.selectUserById"></association>
+    <association property="expert" column="admin_id" select="com.vpms.dao.mapper.AdminMapper.selectExpertById"></association>
+  </resultMap>
+
+  <select id="selectAnswerByQuestion" resultMap="BaseResultMap">
+    select * from answer a where a.question_id=#{questionId} order by a.answer_time
+  </select>
+
+  <select id="selectAnswerCount" resultType="java.lang.Integer">
+    select COUNT(a.answer_id) from answer a where a.teacher_id=#{teacherId}
+  </select>
+
+  <select id="selectAnswerExpertIds" resultType="java.lang.Integer">
+    select DISTINCT(a.admin_id) from answer a where a.question_id=#{questionId} and a.answer_type=1
+  </select>
+</mapper>
