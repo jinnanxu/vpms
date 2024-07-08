@@ -9,4 +9,16 @@
 本博主还有掌上智慧农场小程序、基于决策树算法的农作物病虫害智能诊断平台、校园二手平台小程序、高校宿舍管理系统、流浪宠物救助平台、网上商城、公寓租赁平台等众多原创一手项目，适合初学者实践入门、毕业设计等。有需要请邮件联系：157086662@qq.com
 
 ## 运行截图 
+![image](vpms-vue/static/vpms(1).png)
 
+![image](vpms-vue/static/vpms(5).png)
+
+![image](vpms-vue/static/vpms(6).png)
+
+![image](vpms-vue/static/vpms(7).png)
+
+![image](vpms-vue/static/vpms(8).png)
+
+![image](vpms-vue/static/vpms(9).png)
+
+![image](vpms-vue/static/vpms(12).png)
