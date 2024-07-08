@@ -27,9 +27,10 @@ public class ServerUploadUtil {
 
     @Value("${upload.server.uuid}")
     private String uuid;
+@Value("${upload.server.upload.url}")
+    private String url;
 
 	public String uploadToServer(String fileName,File file) {
-		String url = "http://118.25.89.125:16602/upload-server/upload";
         String result = "";
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
